@@ -23,7 +23,9 @@ public class SplashView extends View {
     private String mSplashText;
     private float mSplashSize;
     private Paint mPaintSplashText;
+    private Paint mPaintCircle;
     private final int MAX_SIZE_SPLASH = dip2px(80);
+    private final int MAX_SIZE_TEXT = sp2px(60);
     private Rect mBound = new Rect();
 
     public SplashView(Context context) {
@@ -53,7 +55,42 @@ public class SplashView extends View {
         }
         array.recycle();
         mPaintSplashText = new Paint();
+        mPaintCircle = new Paint();
+        mPaintCircle.setColor(getResources().getColor(R.color.black));
         mPaintSplashText.setColor(getResources().getColor(R.color.black));
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        mPaintSplashText.setTextSize(MAX_SIZE_TEXT);
+        mPaintSplashText.getTextBounds(mSplashText, 0, mSplashText.length(), mBound);
+        Log.d("onDraw"," length---" + mBound.width());
+
+//        canvas.drawCircle(50,50,20,mPaintCircle);
+        canvas.drawText(mSplashText, (getWidth() / 2 - mBound.width() / 2), (getHeight() / 2 + mBound.height() / 2), mPaintSplashText);
+        Log.d("onDraw"," width--" + getWidth() + " mBound width--" + mBound.width()
+                + " height--" + getHeight() + "  mBound height--" + mBound.height()
+        );
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        if (widthMode == MeasureSpec.EXACTLY) {
+            mWidth = widthSize;
+        }
+
+        if (heightMode == MeasureSpec.EXACTLY) {
+            mHeight = heightSize;
+        }
+
+        setMeasuredDimension(mWidth,mHeight);
     }
 
     private int dip2px(float dipValue) {
@@ -75,38 +112,5 @@ public class SplashView extends View {
         final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue/fontScale + 0.5f);
     }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        mPaintSplashText.setTextSize(mSplashSize);
-
-        canvas.drawText(mSplashText, getWidth() / 2 - mBound.width() / 2, getHeight() / 2 + mBound.height() / 2, mPaintSplashText);
-        Log.d("onMeasure","mSplashSize---" + mSplashSize + "  length---" + mSplashText.length() + "  width:--" + getWidth()
-        + "  mBound---" + mBound.width() + "  mBound height--" + mBound.height());
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        mPaintSplashText.getTextBounds(mSplashText, 0, mSplashText.length(), mBound);
-
-//        if (widthMode == MeasureSpec.EXACTLY) {
-//            mWidth = widthSize;
-//        }
-//
-//        if (heightMode == MeasureSpec.EXACTLY) {
-//            mHeight = heightSize;
-//        }
-
-        mWidth = mBound.width() + 60;
-        mHeight = mBound.height();
-        setMeasuredDimension(mWidth,mHeight);
-    }
-
 
 }
