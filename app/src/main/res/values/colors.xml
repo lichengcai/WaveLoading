@@ -4,4 +4,18 @@
         <color name="colorPrimaryDark">#303F9F</color>
         <color name="colorAccent">#FF4081</color>
         <color name="colorDefault">#18bea3</color>
+        <!-- 基础色 -->
+        <color name="transparent">#00000000</color>
+        <color name="gray">#808080</color>
+        <color name="white">#FFFFFF</color>
+        <color name="black">#000000</color>
+        <color name="red">#ff0000</color>
+        <color name="tran">#00000000</color>
+        <color name="blue">#3b82c4</color>
+        <color name="yellow">#ffb400</color>
+        <color name="green">#339900</color>
+        <color name="gray_heavy">#8f8f8f</color>
+        <color name="gray_light">#cccccc</color>
+        <color name="orange">#ff6600</color>
+        <color name="divider_for_edt">#b4b5b5</color>
 </resources>

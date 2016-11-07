@@ -9,4 +9,9 @@
         <attr name="speed"/>
         <attr name="bgBitmap"/>
     </declare-styleable>
+
+    <declare-styleable name="SplashView">
+        <attr name="splash_text" format="string"/>
+        <attr name="splash_size" format="dimension"/>
+    </declare-styleable>
 </resources>
