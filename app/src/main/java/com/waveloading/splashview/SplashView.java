@@ -1,6 +1,9 @@
 package com.waveloading.splashview;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,8 +17,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.waveloading.R;
+import com.waveloading.particleview.LineEvaluator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 
@@ -53,8 +58,8 @@ public class SplashView extends View {
     private Paint mPaintCircle;
     private Rect mBound = new Rect();
     private Rect mBoundEnd = new Rect();
-    private HashMap<Circle, ArrayList<Circle>> mCircleMapStart = new HashMap<>();
-    private HashMap<Circle, ArrayList<Circle>> mCircleMapEnd = new HashMap<>();
+    private HashMap<Integer, ArrayList<Circle>> mCircleMapStart = new HashMap<>();
+    private HashMap<Integer, ArrayList<Circle>> mCircleMapEnd = new HashMap<>();
 
     public SplashView(Context context) {
         this(context,null);
@@ -110,7 +115,7 @@ public class SplashView extends View {
                 Log.d("circle2","circle2===" + circle2.toString());
                 arrayList.add(circle2);
             }
-            mCircleMapEnd.put(circle,arrayList);
+            mCircleMapEnd.put(i,arrayList);
         }
 
 
@@ -127,7 +132,7 @@ public class SplashView extends View {
                 Circle circle2 = new Circle(circle.x,circle.y+dip2px(20)*j,mRadius);
                 arrayList.add(circle2);
             }
-            mCircleMapStart.put(circle,arrayList);
+            mCircleMapStart.put(i,arrayList);
         }
     }
 
@@ -148,6 +153,27 @@ public class SplashView extends View {
         });
         valueAnimator.start();
 
+        Collection<Animator> animList = new ArrayList<>();
+        for (int i=0; i<10; i++) {
+            for (int j=0; j<10; j++) {
+
+                ValueAnimator objectAnimator =  ObjectAnimator.ofObject(new CircleEvaluator(),mCircleMapStart.get(i).get(j),mCircleMapEnd.get(i).get(j));
+                objectAnimator.setDuration(1000 + 20 * i + 30 * j);
+                final int finalI = i;
+                final int finalJ = j;
+                objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        mCircleMapEnd.get(finalI).add(finalJ,(Circle) animation.getAnimatedValue());
+                        postInvalidate();
+                    }
+                });
+                animList.add(objectAnimator);
+            }
+        }
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(animList);
+        set.start();
     }
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -161,7 +187,7 @@ public class SplashView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        for (ArrayList<Circle> array : mCircleMapEnd.values()) {
+        for (ArrayList<Circle> array : mCircleMapStart.values()) {
             for (int i=0; i<array.size(); i++) {
                 Circle circle = array.get(i);
                 canvas.drawCircle(circle.getX(),circle.getY(),circle.getR(),mPaintCircle);
@@ -177,11 +203,25 @@ public class SplashView extends View {
 
     }
 
+    private class CircleEvaluator implements TypeEvaluator<Circle> {
+
+        @Override
+        public Circle evaluate(float fraction, Circle startValue, Circle endValue) {
+            Circle particle = new Circle();
+//            particle.x = startValue.x + (endValue.x - startValue.x) * fraction;
+//            particle.y = startValue.y + (endValue.y - startValue.y) * fraction;
+//            particle.radius = startValue.radius + (endValue.radius - startValue.radius) * fraction;
+            return particle;
+        }
+    }
     private class Circle {
         private int x;
         private int y;
         private int r;
 
+        public Circle() {
+
+        }
         @Override
         public String toString() {
             return "Circle{" +
