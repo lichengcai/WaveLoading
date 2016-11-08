@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.waveloading.R;
 import com.waveloading.particleview.LineEvaluator;
+import com.waveloading.particleview.Particle;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,8 +43,9 @@ public class SplashView extends View {
      */
     private int mSplashSizeStart = sp2px(60);
     private int mSplashSizeDef = dip2px(180);
-    private int mSplashSizeX;
-    private int mSplashSizeY;
+    private float mSplashSizeX;
+    private float mSplashSizeY;
+    final Particle particle = new Particle(50,50,20);
     /**
      * 粒子半径
      */
@@ -136,6 +138,24 @@ public class SplashView extends View {
         }
     }
 
+    public void circleTest() {
+
+        final Particle particle1 = new Particle(100,100,10);
+        ValueAnimator valueAnimator = ValueAnimator.ofObject(new LineEvaluator(),particle,particle1);
+        valueAnimator.setDuration(1000);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Particle particle2 = (Particle) animation.getAnimatedValue();
+                particle.x = particle2.x;
+                particle.y = particle2.y;
+                particle.radius = particle2.radius;
+                postInvalidate();
+            }
+        });
+        valueAnimator.start();
+    }
+
     public void start() {
         ValueAnimator valueAnimator = ValueAnimator.ofInt(mSplashSizeStart,mSplashSizeEnd);
         valueAnimator.setDuration(500);
@@ -156,7 +176,8 @@ public class SplashView extends View {
         Collection<Animator> animList = new ArrayList<>();
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
-
+                Log.d("animList"," mCircleMapStart--" + mCircleMapStart.get(i).get(j).toString()
+                 + " mCircleMapEnd---" + mCircleMapEnd.get(i).get(j).toString());
                 ValueAnimator objectAnimator =  ObjectAnimator.ofObject(new CircleEvaluator(),mCircleMapStart.get(i).get(j),mCircleMapEnd.get(i).get(j));
                 objectAnimator.setDuration(1000 + 20 * i + 30 * j);
                 final int finalI = i;
@@ -164,14 +185,20 @@ public class SplashView extends View {
                 objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
-                        mCircleMapEnd.get(finalI).add(finalJ,(Circle) animation.getAnimatedValue());
+                        Circle circle = (Circle) animation.getAnimatedValue();
+                        Log.d("onAnimation"," circle--" + circle.toString());
+                        mCircleMapStart.get(finalI).get(finalJ).setX(circle.x);
+                        mCircleMapStart.get(finalI).get(finalJ).setY(circle.y);
+                        mCircleMapStart.get(finalI).get(finalJ).setR(circle.r);
                         postInvalidate();
                     }
                 });
                 animList.add(objectAnimator);
             }
         }
+
         AnimatorSet set = new AnimatorSet();
+        set.setDuration(1000);
         set.playTogether(animList);
         set.start();
     }
@@ -193,6 +220,7 @@ public class SplashView extends View {
                 canvas.drawCircle(circle.getX(),circle.getY(),circle.getR(),mPaintCircle);
             }
         }
+        canvas.drawCircle(particle.x,particle.y,particle.radius,mPaintCircle);
         canvas.drawText(mSplashText, (getWidth() / 2 - mBound.width() / 2), (getHeight() / 2 + mBound.height() / 2), mPaintSplashText);
     }
 
@@ -208,16 +236,16 @@ public class SplashView extends View {
         @Override
         public Circle evaluate(float fraction, Circle startValue, Circle endValue) {
             Circle particle = new Circle();
-//            particle.x = startValue.x + (endValue.x - startValue.x) * fraction;
-//            particle.y = startValue.y + (endValue.y - startValue.y) * fraction;
-//            particle.radius = startValue.radius + (endValue.radius - startValue.radius) * fraction;
+            particle.x = startValue.x + (endValue.x - startValue.x) * fraction;
+            particle.y = startValue.y + (endValue.y - startValue.y) * fraction;
+            particle.r = startValue.r + (endValue.r - startValue.r) * fraction;
             return particle;
         }
     }
     private class Circle {
-        private int x;
-        private int y;
-        private int r;
+        private float x;
+        private float y;
+        private float r;
 
         public Circle() {
 
@@ -231,33 +259,33 @@ public class SplashView extends View {
                     '}';
         }
 
-        public Circle(int x, int y, int r) {
+        public Circle(float x, float y, float r) {
             this.x = x;
             this.y = y;
             this.r = r;
         }
 
-        public int getX() {
+        public float getX() {
             return x;
         }
 
-        public void setX(int x) {
+        public void setX(float x) {
             this.x = x;
         }
 
-        public int getY() {
+        public float getY() {
             return y;
         }
 
-        public void setY(int y) {
+        public void setY(float y) {
             this.y = y;
         }
 
-        public int getR() {
+        public float getR() {
             return r;
         }
 
-        public void setR(int r) {
+        public void setR(float r) {
             this.r = r;
         }
     }

@@ -25,4 +25,8 @@ public class SplashActivity extends Activity {
         Toast.makeText(this,"start",Toast.LENGTH_SHORT).show();
         mSplashView.start();
     }
+
+    public void circle(View view) {
+        mSplashView.circleTest();
+    }
 }
