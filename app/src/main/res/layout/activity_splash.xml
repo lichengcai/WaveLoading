@@ -14,7 +14,7 @@
             android:id="@+id/splashView"
             android:background="@color/buy_now"
             app:splash_size="20sp"
-            app:splash_text="koo"
+            app:splash_text="直播"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

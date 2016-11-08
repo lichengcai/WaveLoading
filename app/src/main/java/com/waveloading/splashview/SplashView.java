@@ -174,12 +174,13 @@ public class SplashView extends View {
         valueAnimator.start();
 
         Collection<Animator> animList = new ArrayList<>();
+        AnimatorSet set = new AnimatorSet();
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
                 Log.d("animList"," mCircleMapStart--" + mCircleMapStart.get(i).get(j).toString()
                  + " mCircleMapEnd---" + mCircleMapEnd.get(i).get(j).toString());
                 ValueAnimator objectAnimator =  ObjectAnimator.ofObject(new CircleEvaluator(),mCircleMapStart.get(i).get(j),mCircleMapEnd.get(i).get(j));
-                objectAnimator.setDuration(1000 + 20 * i + 30 * j);
+                objectAnimator.setDuration(1000 + 50 * i + 30 * j);
                 final int finalI = i;
                 final int finalJ = j;
                 objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -197,8 +198,8 @@ public class SplashView extends View {
             }
         }
 
-        AnimatorSet set = new AnimatorSet();
-        set.setDuration(1000);
+
+//        set.setDuration(3000);
         set.playTogether(animList);
         set.start();
     }
