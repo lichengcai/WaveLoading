@@ -16,7 +16,8 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
-import net.koo.R;
+
+import com.waveloading.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
