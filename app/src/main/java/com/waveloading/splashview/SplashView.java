@@ -18,8 +18,6 @@ import com.waveloading.R;
  */
 
 public class SplashView extends View {
-    private int mHeight;
-    private int mWidth;
     private String mSplashText;
     private float mSplashSize;
     private Paint mPaintSplashText;
@@ -65,32 +63,12 @@ public class SplashView extends View {
         super.onDraw(canvas);
         mPaintSplashText.setTextSize(MAX_SIZE_TEXT);
         mPaintSplashText.getTextBounds(mSplashText, 0, mSplashText.length(), mBound);
-        Log.d("onDraw"," length---" + mBound.width());
 
-//        canvas.drawCircle(50,50,20,mPaintCircle);
+        canvas.drawCircle(50,50,20,mPaintCircle);
         canvas.drawText(mSplashText, (getWidth() / 2 - mBound.width() / 2), (getHeight() / 2 + mBound.height() / 2), mPaintSplashText);
         Log.d("onDraw"," width--" + getWidth() + " mBound width--" + mBound.width()
                 + " height--" + getHeight() + "  mBound height--" + mBound.height()
         );
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
-        if (widthMode == MeasureSpec.EXACTLY) {
-            mWidth = widthSize;
-        }
-
-        if (heightMode == MeasureSpec.EXACTLY) {
-            mHeight = heightSize;
-        }
-
-        setMeasuredDimension(mWidth,mHeight);
     }
 
     private int dip2px(float dipValue) {

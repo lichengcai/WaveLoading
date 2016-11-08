@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="300dp"
+    android:layout_height="300dp">
 
     <com.waveloading.splashview.SplashView
         android:background="@color/gray_heavy"
         app:splash_size="20sp"
-        app:splash_text="A"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        app:splash_text="ABCD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
