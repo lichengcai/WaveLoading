@@ -4,7 +4,7 @@
         <color name="colorPrimaryDark">#303F9F</color>
         <color name="colorAccent">#FF4081</color>
         <color name="colorDefault">#18bea3</color>
-        <color name="transTest">#0e666666</color>
+        <color name="transTest">#1e000000</color>
         <color name="buy_now">#0088ff</color>
         <!-- 基础色 -->
         <color name="transparent">#00000000</color>

@@ -23,6 +23,7 @@ import com.waveloading.particleview.Particle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Random;
 
 
 /**
@@ -94,35 +95,33 @@ public class SplashView extends View {
 
     public void initPaint() {
         mPaintSplashText = new Paint();
-        mPaintSplashText.setColor(getResources().getColor(R.color.gray));
-        mPaintSplashText.setTextSize(mSplashSizeEnd);
-        mPaintSplashText.getTextBounds(mSplashText,0,mSplashText.length(),mBoundEnd);
+        mPaintSplashText.setColor(getResources().getColor(R.color.transTest));
+
 
         mPaintSplashText.setTextSize(mSplashSizeStart);
-        mPaintSplashText.getTextBounds(mSplashText, 0, mSplashText.length(), mBound);
-        Log.d("init"," mBound--" + mBound.width()+ "---" + mBound.height()
-         + "  mBoundEnd--" + mBoundEnd.width() + "--" + mBoundEnd.height());
+//        mPaintSplashText.getTextBounds(mSplashText, 0, mSplashText.length(), mBound);
+//        Log.d("init"," mBound--" + mBound.width()+ "---" + mBound.height()
+//         + "  mBoundEnd--" + mBoundEnd.width() + "--" + mBoundEnd.height());
 
-        int widthSize = mBoundEnd.width() + 40;
-        int heightSize = mBoundEnd.height() + 20;
-        int r = widthSize/38;
-        int b = heightSize/9;
-        mSplashSizeX = (getWidth()/2-mBoundEnd.width()/2) - 10 + r;
-        mSplashSizeY = (getHeight()/2-mBoundEnd.height()/2) - 12 + r;
-        for (int i=0; i<10; i++) {
-            Circle circle = new Circle(mSplashSizeX+(4*r)*i,mSplashSizeY,r);
-            ArrayList<Circle> arrayList = new ArrayList<>();
-            for (int j=0; j<10; j++) {
-                Circle circle2 = new Circle(circle.x,circle.y+b*j,r);
-                Log.d("circle2","circle2===" + circle2.toString());
-                arrayList.add(circle2);
-            }
-            mCircleMapEnd.put(i,arrayList);
-        }
-
+//        int widthSize = mBoundEnd.width() + 40;
+//        int heightSize = mBoundEnd.height() + 20;
+//        int r = widthSize/38;
+//        int b = heightSize/9;
+//        mSplashSizeX = (getWidth()/2-mBoundEnd.width()/2) - 10 + r;
+//        mSplashSizeY = (getHeight()/2-mBoundEnd.height()/2) - 12 + r;
+//        for (int i=0; i<10; i++) {
+//            Circle circle = new Circle(mSplashSizeX+(4*r)*i,mSplashSizeY,r);
+//            ArrayList<Circle> arrayList = new ArrayList<>();
+//            for (int j=0; j<10; j++) {
+//                Circle circle2 = new Circle(circle.x,circle.y+b*j,r);
+//                Log.d("circle2","circle2===" + circle2.toString());
+//                arrayList.add(circle2);
+//            }
+//            mCircleMapEnd.put(i,arrayList);
+//        }
 
         mPaintCircle = new Paint();
-        mPaintCircle.setColor(getResources().getColor(R.color.gray_light));
+        mPaintCircle.setColor(getResources().getColor(R.color.white));
 
         mCircleMapStart = new HashMap<>();
         int x = (getWidth()/2-mSplashSizeDef/2);
@@ -173,6 +172,25 @@ public class SplashView extends View {
         });
         valueAnimator.start();
 
+        mPaintSplashText.setTextSize(mSplashSizeEnd);
+
+        float textWidth = getTextWidth(mSplashText,mPaintSplashText);
+        float textHeight = getTextHeight(mSplashText,mPaintSplashText);
+        Log.d("EndText"," textWidth--"+textWidth + "  textHeight--" + textHeight);
+        float ra = (textWidth+40)/56;
+        float da = (textHeight+20)/9;
+        float Ex = getWidth()/2-textWidth/2-20+ra;
+        float Ey = getHeight()/2-textHeight/2-10;
+        for (int i=0; i<10; i++) {
+            Circle circle = new Circle(Ex+(6*ra)*i,Ey,ra);
+            ArrayList<Circle> arrayList = new ArrayList<>();
+            for (int j=0; j<10; j++) {
+                Circle circle1 = new Circle(circle.x,circle.y+da*j,ra);
+                arrayList.add(circle1);
+            }
+            mCircleMapEnd.put(i,arrayList);
+        }
+
         Collection<Animator> animList = new ArrayList<>();
         AnimatorSet set = new AnimatorSet();
         for (int i=0; i<10; i++) {
@@ -180,7 +198,7 @@ public class SplashView extends View {
                 Log.d("animList"," mCircleMapStart--" + mCircleMapStart.get(i).get(j).toString()
                  + " mCircleMapEnd---" + mCircleMapEnd.get(i).get(j).toString());
                 ValueAnimator objectAnimator =  ObjectAnimator.ofObject(new CircleEvaluator(),mCircleMapStart.get(i).get(j),mCircleMapEnd.get(i).get(j));
-                objectAnimator.setDuration(1000 + 50 * i + 30 * j);
+                objectAnimator.setDuration((long) (Math.random() + 100 * i + 150 * j));
                 final int finalI = i;
                 final int finalJ = j;
                 objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -197,9 +215,6 @@ public class SplashView extends View {
                 animList.add(objectAnimator);
             }
         }
-
-
-//        set.setDuration(3000);
         set.playTogether(animList);
         set.start();
     }
@@ -221,15 +236,22 @@ public class SplashView extends View {
                 canvas.drawCircle(circle.getX(),circle.getY(),circle.getR(),mPaintCircle);
             }
         }
-        canvas.drawCircle(particle.x,particle.y,particle.radius,mPaintCircle);
-        canvas.drawText(mSplashText, (getWidth() / 2 - mBound.width() / 2), (getHeight() / 2 + mBound.height() / 2), mPaintSplashText);
-    }
+//        canvas.drawText(mSplashText, (getWidth() / 2 - mBound.width() / 2), (getHeight() / 2 + mBound.height() / 2), mPaintSplashText);
+        mPaintSplashText.setColor(getResources().getColor(R.color.black));
+        canvas.drawText(mSplashText, (getWidth() / 2 - getTextWidth(mSplashText,mPaintSplashText) / 2), (getHeight() / 2 + getTextHeight(mSplashText,mPaintSplashText) / 2), mPaintSplashText);
 
+    }
+    private float getTextWidth(String text, Paint paint) {
+        return paint.measureText(text);
+    }
+    private float getTextHeight(String text, Paint paint) {
+        Rect rect = new Rect();
+        paint.getTextBounds(text, 0, text.length(), rect);
+        return rect.height() / 1.1f;
+    }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-
     }
 
     private class CircleEvaluator implements TypeEvaluator<Circle> {

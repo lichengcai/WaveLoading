@@ -7,14 +7,14 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="300dp">
 
         <com.waveloading.splashview.SplashView
             android:id="@+id/splashView"
             android:background="@color/buy_now"
-            app:splash_size="20sp"
-            app:splash_text="直播"
+            app:splash_size="10sp"
+            app:splash_text="DCBA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -32,6 +32,10 @@
         <Button
             android:onClick="circle"
             android:text="circle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:onClick="textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
